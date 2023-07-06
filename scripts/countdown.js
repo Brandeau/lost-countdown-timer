@@ -56,6 +56,11 @@ class Timer {
 
 }
 
+/**
+ * Injects the minutes and seconds to the clock
+ * @param {number} minutes 
+ * @param {number} seconds 
+ */
 function injectDigits(minutes, seconds){
 
     MINUTES_HUNDREDS.innerHTML = `${Math.floor((minutes / 100) % 10)}`;
@@ -64,9 +69,13 @@ function injectDigits(minutes, seconds){
     SECONDS_TENS.innerHTML = `${Math.floor((seconds / 10) % 10)}`;
     SECONDS_UNITS.innerHTML = `${Math.floor((seconds / 1) % 10)}`;
 
+
 }
 
 
+/**
+ * Listens for the ENTER key on the input field
+ */
 INPUT.addEventListener("keydown", function (event) {
  if (event.key === "Enter") {  
    validate(event);
@@ -75,6 +84,10 @@ INPUT.addEventListener("keydown", function (event) {
 
 });
 
+/**
+ * Validates the value of the input field
+ * @param {*} event 
+ */
 function validate(event) {
     let inputText = event.target.value;
 
@@ -84,20 +97,33 @@ function validate(event) {
     }
   }
 
+/**
+ * Funtion that starts the timer
+ */  
 function startTimer(){
 
     let currentDate = new Date().getTime();
-
+    
     let distance = newTimer.countdownDate - currentDate;
 
-    if (distance <= 0) {
+    let minutes = newTimer.getMinutes(distance) < 0 ? 0 : newTimer.getMinutes(distance);
+    console.log(minutes);
+
+    let seconds = newTimer.getSeconds(distance);
+    console.log(seconds);
+
+
+    if (minutes <= 0 && seconds <= 0) {
         clearInterval(timerInterval);
     }
 
-    injectDigits(newTimer.getMinutes(distance), newTimer.getSeconds(distance));
+    injectDigits(minutes, seconds);
     
 }
 
+/**
+ * Function that restarts the timer
+ */
 function restartTimer(){
 
     clearInterval(timerInterval);
@@ -114,7 +140,10 @@ function restartTimer(){
 
 }
 
-let newTimer = new Timer(108);
+/**
+ * New Date object 108 minutes in the future
+ */
+let newTimer = new Timer(1);
 
 let timerInterval = setInterval(startTimer, 1000);
 
