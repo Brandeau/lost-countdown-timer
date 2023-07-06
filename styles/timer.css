@@ -1,4 +1,4 @@
-#clock {
+#clock, #minutes-box, #seconds-box {
     display: flex;
     font-size: 100px;
 }

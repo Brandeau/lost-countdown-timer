@@ -14,6 +14,8 @@ const SECONDS_TENS = document.getElementById("seconds-tens");
 
 const SECONDS_UNITS = document.getElementById("seconds-units");
 
+const INPUT = document.getElementById("terminal-input-area");
+
 // #endregion Constants
 
 // #region Domain Logic
@@ -64,9 +66,25 @@ function injectDigits(minutes, seconds){
 
 }
 
-let newTimer = new Timer(108);
 
-let timerInterval = setInterval(function(){
+INPUT.addEventListener("keydown", function (event) {
+ if (event.key === "Enter") {  
+   validate(event);
+   document.getElementById("terminal-input-area").value = " ";
+ }
+
+});
+
+function validate(event) {
+    let inputText = event.target.value;
+
+    if(inputText.match(/\s*4 \s*8 \s*15 \s*16 \s*23 \s*42\s*/)){
+  
+        restartTimer();
+    }
+  }
+
+function startTimer(){
 
     let currentDate = new Date().getTime();
 
@@ -76,9 +94,27 @@ let timerInterval = setInterval(function(){
         clearInterval(timerInterval);
     }
 
-    injectDigits(newTimer.getMinutes(distance), newTimer.getSeconds(distance))
-
-    console.log(`${Math.floor((newTimer.getMinutes(distance) / 100) % 10)} ${Math.floor((newTimer.getMinutes(distance) / 10) % 10)} ${Math.floor((newTimer.getMinutes(distance) / 1) % 10)} : ${Math.floor((newTimer.getSeconds(distance) / 10) % 10)} ${Math.floor((newTimer.getSeconds(distance) / 1) % 10)}`);
-
+    injectDigits(newTimer.getMinutes(distance), newTimer.getSeconds(distance));
     
-}, 1000)
+}
+
+function restartTimer(){
+
+    clearInterval(timerInterval);
+
+    MINUTES_HUNDREDS.innerHTML = "1";
+    MINUTES_TENS.innerHTML = "0";
+    MINUTES_UNITS.innerHTML = "8";
+    SECONDS_TENS.innerHTML = "0";
+    SECONDS_UNITS.innerHTML = "0";
+
+    newTimer = new Timer(108);
+
+    timerInterval = setInterval(startTimer, 1000);
+
+}
+
+let newTimer = new Timer(108);
+
+let timerInterval = setInterval(startTimer, 1000);
+
