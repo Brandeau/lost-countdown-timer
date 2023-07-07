@@ -20,6 +20,15 @@ const INPUT = document.getElementById("terminal-input-area");
 
 // #region Domain Logic
 
+class CustomAudio extends Audio{
+    stop() {
+        this.pause()
+        this.currentTime = 0;
+      }
+  }
+
+const ALARM = new CustomAudio("assets/sounds/alarm.mp3");
+
 /**
  * Class to generate timer
  */
@@ -33,7 +42,8 @@ class Timer {
  */
     constructor(timerLength){
 
-        this.countdownDate = this.#date.setMinutes(this.#date.getMinutes() + timerLength);
+       // this.countdownDate = this.#date.setMinutes(this.#date.getMinutes() + timerLength);
+       this.countdownDate = this.#date.getTime() + timerLength * 1000;
     }
 
 /**
@@ -51,7 +61,7 @@ class Timer {
  * @returns {number}
  */
     getSeconds(distance){
-        return Math.ceil((distance % (1000 * 60)) / 1000);
+        return Math.floor((distance % (1000 * 60)) / 1000);
     }
 
 }
@@ -94,6 +104,7 @@ function validate(event) {
     if(inputText.match(/\s*4 \s*8 \s*15 \s*16 \s*23 \s*42\s*/)){
   
         restartTimer();
+        ALARM.stop();
     }
   }
 
@@ -107,12 +118,13 @@ function startTimer(){
     let distance = newTimer.countdownDate - currentDate;
 
     let minutes = newTimer.getMinutes(distance) < 0 ? 0 : newTimer.getMinutes(distance);
-    console.log(minutes);
 
-    let seconds = newTimer.getSeconds(distance);
-    console.log(seconds);
+    let seconds = newTimer.getSeconds(distance) < 0 ? 0 : newTimer.getSeconds(distance);
 
-
+    if(minutes === 3){
+        ALARM.play();
+    }
+    
     if (minutes <= 0 && seconds <= 0) {
         clearInterval(timerInterval);
     }
@@ -134,7 +146,7 @@ function restartTimer(){
     SECONDS_TENS.innerHTML = "0";
     SECONDS_UNITS.innerHTML = "0";
 
-    newTimer = new Timer(108);
+    newTimer = new Timer(6481);
 
     timerInterval = setInterval(startTimer, 1000);
 
@@ -143,7 +155,7 @@ function restartTimer(){
 /**
  * New Date object 108 minutes in the future
  */
-let newTimer = new Timer(1);
+let newTimer = new Timer(6481);
 
 let timerInterval = setInterval(startTimer, 1000);
 
