@@ -123,6 +123,7 @@ function startTimer(){
 
     if(minutes === 3){
         ALARM.play();
+        INPUT?.removeAttribute("readonly");
     }
     
     if (minutes <= 0 && seconds <= 0) {
@@ -155,7 +156,8 @@ function restartTimer(){
 /**
  * New Date object 108 minutes in the future
  */
-let newTimer = new Timer(6481);
+//let newTimer = new Timer(6481);
+let newTimer = new Timer(300);
 
 let timerInterval = setInterval(startTimer, 1000);
 
