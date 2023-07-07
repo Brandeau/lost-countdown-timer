@@ -141,6 +141,8 @@ function restartTimer(){
 
     clearInterval(timerInterval);
 
+    INPUT?.setAttribute("readonly", "true");
+
     MINUTES_HUNDREDS.innerHTML = "1";
     MINUTES_TENS.innerHTML = "0";
     MINUTES_UNITS.innerHTML = "8";
