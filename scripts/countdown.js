@@ -4,15 +4,7 @@
  * HTML element
  * @type {HTMLElement | null}
  */
-const MINUTES_HUNDREDS = document.getElementById("minutes-hundreds");
 
-const MINUTES_TENS = document.getElementById("minutes-tens");
-
-const MINUTES_UNITS = document.getElementById("minutes-units");
-
-const SECONDS_TENS = document.getElementById("seconds-tens");
-
-const SECONDS_UNITS = document.getElementById("seconds-units");
 
 const INPUT = document.getElementById("terminal-input-area");
 
@@ -48,20 +40,20 @@ class Timer {
 
 /**
  * Extracts the minutes from the milliseconds returned by Date and rounds them down
- * @param {number} distance 
+ * @param {number} timeLeft 
  * @returns {number}
  */
-    getMinutes(distance){
-        return Math.floor((distance / 60000));
+    getMinutes(timeLeft){
+        return Math.floor((timeLeft / 60000));
     }
 
 /**
  * Extracts the seconds from the milliseconds returned by Date and rounds them down
- * @param {number} distance 
+ * @param {number} timeLeft 
  * @returns {number}
  */
-    getSeconds(distance){
-        return Math.floor((distance % (1000 * 60)) / 1000);
+    getSeconds(timeLeft){
+        return Math.floor((timeLeft % (1000 * 60)) / 1000);
     }
 
 }
@@ -71,16 +63,16 @@ class Timer {
  * @param {number} minutes 
  * @param {number} seconds 
  */
-function injectDigits(minutes, seconds){
+//function injectDigits(minutes, seconds){
 
-    MINUTES_HUNDREDS.innerHTML = `${Math.floor((minutes / 100) % 10)}`;
-    MINUTES_TENS.innerHTML = `${Math.floor((minutes / 10) % 10)}`;
-    MINUTES_UNITS.innerHTML = `${Math.floor((minutes / 1) % 10)}`;
-    SECONDS_TENS.innerHTML = `${Math.floor((seconds / 10) % 10)}`;
-    SECONDS_UNITS.innerHTML = `${Math.floor((seconds / 1) % 10)}`;
+    //MINUTES_HUNDREDS.innerHTML = `${Math.floor((minutes / 100) % 10)}`;
+    //MINUTES_TENS.innerHTML = `${Math.floor((minutes / 10) % 10)}`;
+    //MINUTES_UNITS.innerHTML = `${Math.floor((minutes / 1) % 10)}`;
+    //SECONDS_TENS.innerHTML = `${Math.floor((seconds / 10) % 10)}`;
+    //SECONDS_UNITS.innerHTML = `${Math.floor((seconds / 1) % 10)}`;
 
 
-}
+//}
 
 
 /**
@@ -108,6 +100,44 @@ function validate(event) {
     }
   }
 
+  function flipAllCards(minutes, seconds) {
+
+    flip(document.querySelector("[data-minutes-hundreds]"), Math.floor((minutes / 100) % 10));
+    flip(document.querySelector("[data-minutes-tens]"), Math.floor((minutes / 10) % 10));
+    flip(document.querySelector("[data-minutes-ones]"), Math.floor((minutes / 1) % 10));
+    flip(document.querySelector("[data-seconds-tens]"), Math.floor((seconds / 10) % 10));
+    flip(document.querySelector("[data-seconds-ones]"), Math.floor((seconds / 1) % 10));
+  }
+  
+  function flip(flipCard, newNumber) {
+    const topHalf = flipCard.querySelector(".top");
+    const startNumber = parseInt(topHalf.textContent);
+    if (newNumber === startNumber) return
+  
+    const bottomHalf = flipCard.querySelector(".bottom");
+    const topFlip = document.createElement("div");
+    topFlip.classList.add("top-flip");
+    const bottomFlip = document.createElement("div");
+    bottomFlip.classList.add("bottom-flip");
+  
+    topHalf.textContent = startNumber;
+    bottomHalf.textContent = startNumber;
+    topFlip.textContent = startNumber;
+    bottomFlip.textContent = newNumber;
+  
+    topFlip.addEventListener("animationstart", e => {
+      topHalf.textContent = newNumber
+    })
+    topFlip.addEventListener("animationend", e => {
+      topFlip.remove()
+    })
+    bottomFlip.addEventListener("animationend", e => {
+      bottomHalf.textContent = newNumber
+      bottomFlip.remove()
+    })
+    flipCard.append(topFlip, bottomFlip)
+  }
+
 /**
  * Funtion that starts the timer
  */  
@@ -115,11 +145,11 @@ function startTimer(){
 
     let currentDate = new Date().getTime();
     
-    let distance = newTimer.countdownDate - currentDate;
+    let timeLeft = newTimer.countdownDate - currentDate;
 
-    let minutes = newTimer.getMinutes(distance) < 0 ? 0 : newTimer.getMinutes(distance);
+    let minutes = newTimer.getMinutes(timeLeft) < 0 ? 0 : newTimer.getMinutes(timeLeft);
 
-    let seconds = newTimer.getSeconds(distance) < 0 ? 0 : newTimer.getSeconds(distance);
+    let seconds = newTimer.getSeconds(timeLeft) < 0 ? 0 : newTimer.getSeconds(timeLeft);
 
     if(minutes === 3){
         ALARM.play();
@@ -130,7 +160,8 @@ function startTimer(){
         clearInterval(timerInterval);
     }
 
-    injectDigits(minutes, seconds);
+   // injectDigits(minutes, seconds);
+    flipAllCards(minutes, seconds);
     
 }
 
@@ -143,12 +174,6 @@ function restartTimer(){
 
     INPUT?.setAttribute("readonly", "true");
 
-    MINUTES_HUNDREDS.innerHTML = "1";
-    MINUTES_TENS.innerHTML = "0";
-    MINUTES_UNITS.innerHTML = "8";
-    SECONDS_TENS.innerHTML = "0";
-    SECONDS_UNITS.innerHTML = "0";
-
     newTimer = new Timer(6481);
 
     timerInterval = setInterval(startTimer, 1000);
@@ -158,8 +183,8 @@ function restartTimer(){
 /**
  * New Date object 108 minutes in the future
  */
-//let newTimer = new Timer(6481);
-let newTimer = new Timer(300);
+let newTimer = new Timer(6481);
+//let newTimer = new Timer(300);
 
 let timerInterval = setInterval(startTimer, 1000);
 

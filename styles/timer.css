@@ -1,4 +1,118 @@
-#clock, #minutes-box, #seconds-box {
+*, *::after, *::before {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2.25rem;
+  }
+
+
+#clock, .minutes-box, .seconds-box {
     display: flex;
     font-size: 100px;
 }
+
+#hatch{
+    display: flex;
+}
+
+#clock{
+
+    background-color: #a4a49e;
+    display: flex;
+}
+
+.minutes-box, .seconds-box{
+
+    display: flex;
+    background-color: #000000;
+    padding: 10px 5px;
+    margin: 30px 20px;
+}
+
+.minutes-box .flip-card, .seconds-box .flip-card{
+
+    margin: 5px;
+}
+  
+  .flip-card {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    box-shadow: 0 2px 3px 0 #000000;
+    border-radius: .1em;
+  }
+  
+.top,
+  .bottom,
+  .flip-card .top-flip,
+  .flip-card .bottom-flip {
+    height: .75em;
+    line-height: 1;
+    padding: .25em;
+    overflow: hidden;
+  }
+
+  .minutes-box .top,
+  .minutes-box .flip-card .top-flip {
+    background-color: #000000;
+    color:#d4d4d4;
+    border-top-right-radius: .05em;
+    border-top-left-radius: .05em;
+    border-bottom: 1px solid #000000;
+  }
+  
+  .seconds-box .top,
+  .seconds-box .flip-card .top-flip {
+    background-color: #d4d4d4;
+    color:#000000;
+    border-top-right-radius: .05em;
+    border-top-left-radius: .05em;
+    border-bottom: 1px solid #000000;
+  }
+  
+  .minutes-box .bottom,
+  .minutes-box .flip-card .bottom-flip {
+    color:#ffffff;
+    background-color: #2d352a;
+    display: flex;
+    align-items: flex-end;
+    border-bottom-right-radius: .05em;
+    border-bottom-left-radius: .05em;
+  }
+
+  .seconds-box .bottom,
+  .seconds-box .flip-card .bottom-flip {
+    color:#2d352a;
+    background-color: #ffffff;
+    display: flex;
+    align-items: flex-end;
+    border-bottom-right-radius: .05em;
+    border-bottom-left-radius: .05em;
+  }
+  
+  .flip-card .top-flip {
+    position: absolute;
+    width: 100%;
+    animation: flip-top 250ms ease-in;
+    transform-origin: bottom;
+  }
+  
+  @keyframes flip-top {
+    100% {
+      transform: rotateX(90deg);
+    }
+  }
+  
+  .flip-card .bottom-flip {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    animation: flip-bottom 250ms ease-out 250ms;
+    transform-origin: top;
+    transform: rotateX(90deg);
+  }
+  
+  @keyframes flip-bottom {
+    100% {
+      transform: rotateX(0deg);
+    }
+  }
