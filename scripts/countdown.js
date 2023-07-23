@@ -1,5 +1,17 @@
 // #region Constants
 
+const GLYPH_1 = document.createElement("img");
+const GLYPH_2 = document.createElement("img");
+const GLYPH_3 = document.createElement("img");
+const GLYPH_4 = document.createElement("img");
+const GLYPH_5 = document.createElement("img");
+
+GLYPH_1.src = "/assets/images/glyphs/g1.png";
+GLYPH_2.src = "/assets/images/glyphs/g2.png";
+GLYPH_3.src = "/assets/images/glyphs/g3.png";
+GLYPH_4.src = "/assets/images/glyphs/g4.png";
+GLYPH_5.src = "/assets/images/glyphs/g5.png";
+
 /**
  * HTML element
  * @type {HTMLElement | null}
@@ -100,26 +112,61 @@ function validate(event) {
     }
   }
 
-  function flipAllCards(minutes, seconds) {
+  function flipAllNumberCards(minutes, seconds) {
 
-    flip(document.querySelector("[data-minutes-hundreds]"), Math.floor((minutes / 100) % 10));
-    flip(document.querySelector("[data-minutes-tens]"), Math.floor((minutes / 10) % 10));
-    flip(document.querySelector("[data-minutes-ones]"), Math.floor((minutes / 1) % 10));
-    flip(document.querySelector("[data-seconds-tens]"), Math.floor((seconds / 10) % 10));
-    flip(document.querySelector("[data-seconds-ones]"), Math.floor((seconds / 1) % 10));
+    flipNumbers(document.querySelector("[data-minutes-hundreds]"), Math.floor((minutes / 100) % 10));
+    flipNumbers(document.querySelector("[data-minutes-tens]"), Math.floor((minutes / 10) % 10));
+    flipNumbers(document.querySelector("[data-minutes-ones]"), Math.floor((minutes / 1) % 10));
+    flipNumbers(document.querySelector("[data-seconds-tens]"), Math.floor((seconds / 10) % 10));
+    flipNumbers(document.querySelector("[data-seconds-ones]"), Math.floor((seconds / 1) % 10));
+  };
+
+  function flipAllGlyphCards() {
+
+    flipGlyphsRefactor(document.querySelector("[data-minutes-hundreds]"), GLYPH_1);
+    flipGlyphsRefactor(document.querySelector("[data-minutes-tens]"), GLYPH_2);
+    flipGlyphsRefactor(document.querySelector("[data-minutes-ones]"), GLYPH_3);
+    flipGlyphsRefactor(document.querySelector("[data-seconds-tens]"), GLYPH_4);
+    flipGlyphsRefactor(document.querySelector("[data-seconds-ones]"), GLYPH_5);
+  };
+
+  function zeroNumbers(flipCard){
+    const topHalf = flipCard.querySelector(".top");
+    const bottomHalf = flipCard.querySelector(".bottom");
+
+    topHalf.textContent = 0;
+    bottomHalf.textContent = 0;
+
   }
+
+  function zeroAllNumbers(){
+
+    zeroNumbers(document.querySelector("[data-minutes-hundreds]"));
+    zeroNumbers(document.querySelector("[data-minutes-tens]"));
+    zeroNumbers(document.querySelector("[data-minutes-ones]"));
+    zeroNumbers(document.querySelector("[data-seconds-tens]"));
+    zeroNumbers(document.querySelector("[data-seconds-ones]"));
+  }
+
+  function changeAnimationSpeed(flipCard){
+
+    console.log(flipCard);
+
+      flipCard.style.animationDuration = "10ms";
+  }
+
   
-  function flip(flipCard, newNumber) {
+  function flipNumbers(flipCard, newNumber) {
     const topHalf = flipCard.querySelector(".top");
     const startNumber = parseInt(topHalf.textContent);
     if (newNumber === startNumber) return
   
     const bottomHalf = flipCard.querySelector(".bottom");
     const topFlip = document.createElement("div");
-    topFlip.classList.add("top-flip");
+    topFlip.classList.add("top-flip", "slow-top-animation");
     const bottomFlip = document.createElement("div");
-    bottomFlip.classList.add("bottom-flip");
-  
+    bottomFlip.classList.add("bottom-flip", "slow-bottom-animation");
+
     topHalf.textContent = startNumber;
     bottomHalf.textContent = startNumber;
     topFlip.textContent = startNumber;
@@ -138,6 +185,82 @@ function validate(event) {
     flipCard.append(topFlip, bottomFlip)
   }
 
+  function flipGlyphs(flipCard, glyph){
+
+    const topHalf = flipCard.querySelector(".top");
+    const bottomHalf = flipCard.querySelector(".bottom");
+    const topFlip = document.createElement("div");
+    topFlip.classList.add("top-flip");
+    const bottomFlip = document.createElement("div");
+    bottomFlip.classList.add("bottom-flip");
+
+    topHalf.textContent = ""
+    bottomHalf.textContent = ""
+    // if(typeof topHalf.innerHTML === "string"){
+
+    //   topHalf.replaceChildren();
+    //   bottomHalf.replaceChildren();
+    // }
+
+    topHalf.append(glyph);
+    bottomHalf.append(glyph);
+    topFlip.append(glyph);
+    bottomFlip.append(glyph);
+
+    topFlip.addEventListener("animationstart", e => {
+      topFlip.append(glyph);
+      
+  })
+    topFlip.addEventListener("animationend", e => {
+      topFlip.remove()
+      bottomFlip.append(glyph);
+    })
+    bottomFlip.addEventListener("animationend", e => {
+      bottomHalf.append(glyph);
+      bottomFlip.remove()
+    })
+    flipCard.append(topFlip, bottomFlip);
+  }
+
+  /**
+   * @param {HTMLDivElement} flipCard
+   * @param {HTMLImageElement} glyph
+   * @param {number | null} timerInterval
+   */
+  function flipGlyphsRefactor(flipCard, glyph, timerInterval=null) {
+    const topHalf = flipCard.querySelector(".top");
+    const bottomHalf = flipCard.querySelector(".bottom");
+
+    flipCard.querySelector(".top-flip")?.remove()
+    flipCard.querySelector(".bottom-flip")?.remove()
+    
+    topHalf.textContent = ""
+    bottomHalf.textContent = ""
+
+    const topFlip = document.createElement("div");
+    topFlip.classList.add("top-flip", "fast-top-animation");
+    const bottomFlip = document.createElement("div");
+    bottomFlip.classList.add("bottom-flip", "fast-bottom-animation");
+
+    const topHalfImg = document.createElement("img");
+    topHalfImg.src = glyph.src;
+    const bottomHalfImg = document.createElement("img");
+    bottomHalfImg.src = glyph.src;
+    const topFlipImg = document.createElement("img");
+    topFlipImg.src = glyph.src;
+    const bottomFlipImg = document.createElement("img");
+    bottomFlipImg.src = glyph.src;
+    
+    topHalf.appendChild(topHalfImg);
+    bottomHalf.appendChild(bottomHalfImg);
+    topFlip.appendChild(topFlipImg);
+    bottomFlip.appendChild(bottomFlipImg);
+
+    flipCard.append(topFlip, bottomFlip);
+    
+    // clearInterval(globalThis.glyphIntervalId)
+  }
+
 /**
  * Funtion that starts the timer
  */  
@@ -147,22 +270,26 @@ function startTimer(){
     
     let timeLeft = newTimer.countdownDate - currentDate;
 
-    let minutes = newTimer.getMinutes(timeLeft) < 0 ? 0 : newTimer.getMinutes(timeLeft);
+    //let minutes = newTimer.getMinutes(timeLeft) < 0 ? 0 : newTimer.getMinutes(timeLeft);
+    let minutes = newTimer.getMinutes(timeLeft);
 
-    let seconds = newTimer.getSeconds(timeLeft) < 0 ? 0 : newTimer.getSeconds(timeLeft);
+    //let seconds = newTimer.getSeconds(timeLeft) < 0 ? 0 : newTimer.getSeconds(timeLeft);
+    let seconds = newTimer.getSeconds(timeLeft);
 
     if(minutes === 3){
         ALARM.play();
         INPUT?.removeAttribute("readonly");
     }
-    
-    if (minutes <= 0 && seconds <= 0) {
-        clearInterval(timerInterval);
-    }
 
-   // injectDigits(minutes, seconds);
-    flipAllCards(minutes, seconds);
-    
+    if(seconds >= 0){
+      
+      flipAllNumberCards(minutes, seconds);
+
+    } else{
+        clearInterval(timerInterval);
+        globalThis.glyphIntervalId = setInterval(flipAllGlyphCards, 10);
+    }
+        
 }
 
 /**
@@ -184,7 +311,6 @@ function restartTimer(){
  * New Date object 108 minutes in the future
  */
 let newTimer = new Timer(6481);
-//let newTimer = new Timer(300);
 
 let timerInterval = setInterval(startTimer, 1000);
 

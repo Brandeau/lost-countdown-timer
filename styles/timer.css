@@ -1,17 +1,23 @@
 *, *::after, *::before {
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 2.25rem;
+    /*font-size: 3.25rem;*/
+  }
+
+  img{
+    height: 1em;
   }
 
 
 #clock, .minutes-box, .seconds-box {
     display: flex;
     font-size: 100px;
+    width: 700px;
 }
 
 #hatch{
     display: flex;
+    width: 100%;
 }
 
 #clock{
@@ -26,6 +32,7 @@
     background-color: #000000;
     padding: 10px 5px;
     margin: 30px 20px;
+    width: 700px;
 }
 
 .minutes-box .flip-card, .seconds-box .flip-card{
@@ -49,6 +56,7 @@
     line-height: 1;
     padding: .25em;
     overflow: hidden;
+    width: 110px;
   }
 
   .minutes-box .top,
@@ -92,7 +100,18 @@
   .flip-card .top-flip {
     position: absolute;
     width: 100%;
+    border-top: solid 1px #000000;
+  }
+
+  .slow-top-animation{
+
     animation: flip-top 250ms ease-in;
+    transform-origin: bottom;
+  }
+
+  .fast-top-animation{
+
+    animation: flip-top 50ms ease-in;
     transform-origin: bottom;
   }
   
@@ -106,10 +125,21 @@
     position: absolute;
     bottom: 0;
     width: 100%;
+    border: solid 1px #000000;
+  }
+
+  .slow-bottom-animation{
     animation: flip-bottom 250ms ease-out 250ms;
     transform-origin: top;
     transform: rotateX(90deg);
   }
+
+  .fast-bottom-animation{
+    animation: flip-bottom 50ms ease-in;
+    transform-origin: top;
+    transform: rotateX(90deg);
+  }
+
   
   @keyframes flip-bottom {
     100% {
