@@ -52,11 +52,12 @@
   .bottom,
   .flip-card .top-flip,
   .flip-card .bottom-flip {
-    height: .75em;
+    height: .6em;
     line-height: 1;
-    padding: .25em;
+    padding: .1em;
     overflow: hidden;
     width: 110px;
+    font-size: 1.5em;
   }
 
   .minutes-box .top,
@@ -75,6 +76,12 @@
     border-top-right-radius: .05em;
     border-top-left-radius: .05em;
     border-bottom: 1px solid #000000;
+  }
+
+  .background-red{
+
+    background-color: #ad363c!important;
+
   }
   
   .minutes-box .bottom,
@@ -113,6 +120,7 @@
 
     animation: flip-top 50ms ease-in;
     transform-origin: bottom;
+    filter: blur(5px);
   }
   
   @keyframes flip-top {
@@ -125,7 +133,7 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    border: solid 1px #000000;
+    border-bottom: solid 1px #000000;
   }
 
   .slow-bottom-animation{
@@ -138,6 +146,7 @@
     animation: flip-bottom 50ms ease-in;
     transform-origin: top;
     transform: rotateX(90deg);
+    filter: blur(5px);
   }
 
   
