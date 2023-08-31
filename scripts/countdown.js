@@ -36,10 +36,6 @@ const secondsTopHalf = document.querySelectorAll(".seconds-box .top");
 
 const secondsBottomHalf = document.querySelectorAll(".seconds-box .bottom");
 
-const secondsTopFlip = document.querySelectorAll(".seconds-box .flip-card .top-flip");
-
-const secondsBottomFlip = document.querySelectorAll(".seconds-box .flip-card .bottom-flip");
-
 
 /**
  * HTML element
@@ -66,6 +62,16 @@ class CustomAudio extends Audio{
  * @constant 
  */
 const ALARM = new CustomAudio("assets/sounds/alarm.mp3");
+
+/**
+ * @constant
+ */
+const SYSTEM_FAILURE = new CustomAudio("assets/sounds/systemfailure.mp3");
+
+/**
+ * @constant
+ */
+const FLIP_SOUND = new CustomAudio("assets/sounds/flipsound.mp3");
 
 /**
  * Class to generate timer
@@ -256,10 +262,14 @@ function replaceElementContent(element, content){
       topFlip.remove()
     })
     bottomFlip.addEventListener("animationend", e => {
-      replaceElementContent(bottomHalf, newNumber);
+      replaceElementContent(bottomHalf, newNumber);  
       bottomFlip.remove()
+      FLIP_SOUND.play();
+      FLIP_SOUND.currentTime = 0;
     })
-    flipCard.append(topFlip, bottomFlip)
+    flipCard.append(topFlip, bottomFlip);
+    
+       
   }
 
   /**
@@ -320,6 +330,8 @@ function replaceElementContent(element, content){
     bottomFlip.addEventListener("animationend", e => {
       replaceElementContent(bottomFlip, bottomFlipImg);
       bottomFlip.remove()
+      FLIP_SOUND.play();
+      FLIP_SOUND.currentTime = 0;
     })
 
     flipCard.append(topFlip, bottomFlip);
@@ -335,14 +347,13 @@ function replaceElementContent(element, content){
 
     let current = initial;
 
-    while(current >= -1000){
+    while(current >= -100){
       yield current;
       current--;
     }
   }
   const EVENT_KIND = Object.freeze({
     DECREASE_FLIP_CARD: "decrease-flip-card",
-    FLIP_GLYPHS : "flip-glyphs"
     });
 
 /**
@@ -362,6 +373,7 @@ function replaceElementContent(element, content){
     if(counter < 0 && counter > stopValue){
       flipGlyphsRefactor(this, glyph);
     }
+
   }
 
 /**
@@ -499,7 +511,7 @@ function restartTimer(){
 }
 
 
-let newTimer = new Timer(10);
+let newTimer = new Timer(270);
 
 let timerInterval = setInterval(startTimer, 1000);
 
@@ -510,7 +522,7 @@ querySelector(document.documentElement, "[data-minutes-hundreds]", HTMLDivElemen
 
 querySelector(document.documentElement, "[data-minutes-tens]", HTMLDivElement).addEventListener(
   EVENT_KIND.DECREASE_FLIP_CARD,
-  handleCardUpdate.bind(querySelector(document.documentElement, "[data-minutes-tens]", HTMLDivElement), GLYPH_2, -80)
+  handleCardUpdate.bind(querySelector(document.documentElement, "[data-minutes-tens]", HTMLDivElement), GLYPH_2, -70)
 );
 
 querySelector(document.documentElement, "[data-minutes-ones]", HTMLDivElement).addEventListener(

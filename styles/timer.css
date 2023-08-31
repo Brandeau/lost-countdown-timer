@@ -90,8 +90,8 @@
     background-color: #2d352a;
     display: flex;
     align-items: flex-end;
-    border-bottom-right-radius: .05em;
-    border-bottom-left-radius: .05em;
+    border-bottom-right-radius: .07em;
+    border-bottom-left-radius: .07em;
   }
 
   .seconds-box .bottom,
@@ -100,8 +100,8 @@
     background-color: #ffffff;
     display: flex;
     align-items: flex-end;
-    border-bottom-right-radius: .05em;
-    border-bottom-left-radius: .05em;
+    border-bottom-right-radius: .07em;
+    border-bottom-left-radius: .07em;
   }
   
   .flip-card .top-flip {
@@ -155,3 +155,15 @@
       transform: rotateX(0deg);
     }
   }
+
+
+#terminal-input-area{
+  width: 700px;
+  height: 100px;
+  background-color: #000000;
+  color: greenyellow;
+  font-family: 'VT323', monospace;
+  font-size: 50px;
+  font-weight: bold;
+}
+
